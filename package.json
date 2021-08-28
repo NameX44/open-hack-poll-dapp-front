@@ -1,0 +1,22 @@
+{
+  "name": "open-hack-poll-dapp-front",
+  "version": "1.0.0",
+  "description": "Front end of the simple poll dapp for the open defi hackaton",
+  "main": ".",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NameX44/open-hack-poll-dapp-front.git"
+  },
+  "author": "contact@mobimite.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NameX44/open-hack-poll-dapp-front/issues"
+  },
+  "homepage": "https://github.com/NameX44/open-hack-poll-dapp-front#readme",
+  "dependencies": {
+    "create-react-app": "^4.0.3"
+  }
+}
