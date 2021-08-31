@@ -9,13 +9,15 @@ class Home extends Component {
           event.preventDefault()
           this.props.createPoll(this.poll.value)
         }}>
-          <input id="newPoll" ref={(input) => this.poll = input} type="text" className="form-control" placeholder="New poll question..." required />
-          <input type="submit" />
+          <div class="input-group mb-3">
+            <input id="newPoll" aria-describedby="pollSubmit" type="text" className="form-control" placeholder="New poll question..." required ref={(input) => this.poll = input}/>
+            <input id="pollSubmit" class="btn btn-outline-secondary" type="submit" value="Create poll"/>
+          </div>
         </form>
-        <ul id="pollList" className="list-unstyled">
+        <ul id="pollList" class="list-group mb-5">
           { this.props.polls.map((poll, key) => {
             return(
-                <li  key={poll.id} className="pollRow">
+                <li  key={poll.id} class="list-group-item list-group-numbered">
                   "<i>{poll.question}</i>" created by <b>{poll.creator}</b>
                 </li>
               )

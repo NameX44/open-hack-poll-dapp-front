@@ -5,6 +5,9 @@ import { WEB3_PROVIDER_URL, ROLLUP_TYPE_HASH, ETH_ACCOUNT_LOCK_CODE_HASH, CONTRA
 import { PolyjuiceHttpProvider } from '@polyjuice-provider/web3';
 import Home from './Home'
 import { AddressTranslator } from 'nervos-godwoken-integration';
+import Card from 'react-bootstrap/Card';
+import Table from 'react-bootstrap/Table';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
   async componentWillMount() {
@@ -47,6 +50,9 @@ class App extends Component {
       const addressTranslator = new AddressTranslator();
       const polyjuiceAddress = addressTranslator.ethAddressToGodwokenShortAddress(accounts[0]);
       this.setState({polyjuiceAddress: polyjuiceAddress})
+      const depositAddress = await addressTranslator.getLayer2DepositAddress(web3, accounts[0]);
+
+      this.setState({depositAddress: depositAddress})
     }
 
     const simplePoll = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDR)
@@ -68,6 +74,7 @@ class App extends Component {
     this.state = {
       account: '',
       polyjuiceAddress: '',
+      depositAddress: '',
       pollCount: 0,
       polls: [],
       loading: true
@@ -87,10 +94,36 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container-fluid">
-        <h1>Simple Poll Dapp</h1>
-        <p>Your account: {this.state.account}</p>
-        <p>Polyjuice address: {this.state.polyjuiceAddress}</p>
+      <div className="container-fluid" class="w-75 mx-auto">
+        <h1 class="mb-3 text-center">Simple Poll Dapp</h1>
+
+        <div class="card-group mb-3">
+          <div class="card col-6">
+            <div class="card-body">
+              <h5 class="card-title">ETH Address</h5>
+              <p class="card-text">{this.state.account}</p>
+            </div>
+          </div>
+          <div class="card col-6">
+            <div class="card-body">
+              <h5 class="card-title">Polyjuice address</h5>
+              <p class="card-text">{this.state.polyjuiceAddress}</p>
+            </div>
+          </div>
+          
+        </div>
+
+        <div class="card-group mb-3">
+          <div class="card col-12">
+              <div class="card-body">
+                <h5 class="card-title">Deposit address</h5>
+                <p class="card-text">{this.state.depositAddress.addressString}</p>
+                <p class="card-text"><small class="text-muted">This address can be use in <a href="https://force-bridge-test.ckbapp.dev/bridge/Ethereum/Nervos?xchain-asset=0x0000000000000000000000000000000000000000">ForceBridge</a> to transfer your assets to Nervos Layer 2. <br/>Put depositAddress in the receiver field</small></p>
+                <a class="btn btn-primary" href="https://force-bridge-test.ckbapp.dev/bridge/Ethereum/Nervos?xchain-asset=0x0000000000000000000000000000000000000000">Bridge assets</a>
+              </div>
+            </div>
+
+        </div>
           <div className="row">
             <main role="main" className="col-lg-12 d-flex justify-content-center">
               { this.state.loading
