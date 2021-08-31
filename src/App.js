@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Web3 from 'web3'
 import './App.css'
-import { WEB3_PROVIDER_URL, ROLLUP_TYPE_HASH, ETH_ACCOUNT_LOCK_CODE_HASH, CONTRACT_ADDR, CONTRACT_ABI  } from './config'
+import { WEB3_PROVIDER_URL, ROLLUP_TYPE_HASH, ETH_ACCOUNT_LOCK_CODE_HASH, SUDT_PROXY_CONTRACT_ADDRESS, SUDT_CONTRACT_ABI, CONTRACT_ADDR, CONTRACT_ABI  } from './config'
 import { PolyjuiceHttpProvider } from '@polyjuice-provider/web3';
 import Home from './Home'
 import { AddressTranslator } from 'nervos-godwoken-integration';
@@ -53,6 +53,13 @@ class App extends Component {
       const depositAddress = await addressTranslator.getLayer2DepositAddress(web3, accounts[0]);
 
       this.setState({depositAddress: depositAddress})
+
+      const contract = new web3.eth.Contract(SUDT_CONTRACT_ABI, SUDT_PROXY_CONTRACT_ADDRESS);
+      const sudtBalance = await contract.methods.balanceOf(polyjuiceAddress).call({
+        from: accounts[0]
+      })
+      console.log(sudtBalance);
+      this.setState({sudtBalance: sudtBalance})
     }
 
     const simplePoll = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDR)
@@ -75,6 +82,7 @@ class App extends Component {
       account: '',
       polyjuiceAddress: '',
       depositAddress: '',
+      sudtBalance: 0,
       pollCount: 0,
       polls: [],
       loading: true
@@ -98,19 +106,24 @@ class App extends Component {
         <h1 class="mb-3 text-center">Simple Poll Dapp</h1>
 
         <div class="card-group mb-3">
-          <div class="card col-6">
+          <div class="card">
             <div class="card-body">
               <h5 class="card-title">ETH Address</h5>
               <p class="card-text">{this.state.account}</p>
             </div>
           </div>
-          <div class="card col-6">
+          <div class="card">
             <div class="card-body">
               <h5 class="card-title">Polyjuice address</h5>
               <p class="card-text">{this.state.polyjuiceAddress}</p>
             </div>
           </div>
-          
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">SUDT Balance</h5>
+              <p class="card-text">{this.state.sudtBalance}</p>
+            </div>
+          </div>
         </div>
 
         <div class="card-group mb-3">
